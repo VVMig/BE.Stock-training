@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
   Post,
@@ -12,6 +13,7 @@ import { ApiTags } from '@nestjs/swagger';
 import { AUTH_ENPOINTS, CONTROLLER_ENDPOINTS } from 'src/constants/Endpoints';
 import { LoginDto } from 'src/dtos/Login.dto';
 import { RegisterDto } from 'src/dtos/Register.dto';
+import { AccessTokenGuard } from 'src/guards/access-token.guard';
 import { AuthService } from '../services';
 
 @ApiTags('Auth')
@@ -31,5 +33,11 @@ export class AuthController {
   @Post(AUTH_ENPOINTS.LOGIN)
   async login(@Request() req, @Body() _body: LoginDto) {
     return this.authService.login(req.user);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @Get(AUTH_ENPOINTS.AUTHORIZE)
+  async auth(@Request() req) {
+    return req.user;
   }
 }

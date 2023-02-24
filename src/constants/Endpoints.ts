@@ -17,4 +17,5 @@ export enum USERS_ENDPOINTS {
 export enum AUTH_ENPOINTS {
   LOGIN = 'login',
   REGISTER = 'register',
+  AUTHORIZE = 'authorize',
 }
