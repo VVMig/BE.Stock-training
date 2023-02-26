@@ -27,7 +27,11 @@ export class UsersService {
       name: Roles.USER,
     });
 
+    console.log(role);
+
     newUser.roles = [role];
+
+    console.log(newUser);
 
     return this.userRepository.save(newUser);
   }

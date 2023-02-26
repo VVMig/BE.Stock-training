@@ -1,4 +1,5 @@
 import { ClassSerializerInterceptor, ValidationPipe } from '@nestjs/common';
+import * as cookieParser from 'cookie-parser';
 import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/modules/app.module';
@@ -19,7 +20,14 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
 
-  app.enableCors();
+  console.log(process.env.CLIENT_URL);
+
+  app.enableCors({
+    origin: process.env.CLIENT_URL,
+    credentials: true,
+  });
+
+  app.use(cookieParser());
 
   await app.listen(PORT);
 }

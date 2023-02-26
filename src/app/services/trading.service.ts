@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
 import { CRYPTOCURRENCY_SHORT } from 'src/constants/Currency';
@@ -99,14 +99,12 @@ export class TradingService {
   }
 
   async setTradeResult(
-    userUuid: string,
+    user: User,
     initialBet: number,
     closeBet: number,
     currency: CRYPTOCURRENCY_SHORT,
     tradeState: 'short' | 'long',
   ) {
-    const user = await this.usersService.findUsersByUuid(userUuid);
-
     const queryRunner = this._connection.createQueryRunner();
 
     await queryRunner.connect();
@@ -128,6 +126,8 @@ export class TradingService {
       await queryRunner.commitTransaction();
     } catch (error) {
       await queryRunner.rollbackTransaction();
+
+      new InternalServerErrorException();
     } finally {
       await queryRunner.release();
     }

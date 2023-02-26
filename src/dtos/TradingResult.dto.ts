@@ -5,5 +5,4 @@ export class TradingResultDto {
   closeBet: number;
   currency: CRYPTOCURRENCY_SHORT;
   tradeState: string;
-  userUuid: string;
 }

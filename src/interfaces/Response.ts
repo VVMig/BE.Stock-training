@@ -1,3 +1,5 @@
+import { User } from 'src/typeorm';
+
 export interface IPageResponse<T> {
   data: T[];
   meta: {
@@ -6,4 +8,10 @@ export interface IPageResponse<T> {
     total: number;
     totalPages: number;
   };
+}
+
+export interface IAuthResponse {
+  accessToken: string;
+  refreshToken: string;
+  user: User;
 }

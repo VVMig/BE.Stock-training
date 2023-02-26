@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, ManyToOne } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { User } from './user.entity';
 
@@ -11,8 +11,9 @@ export class Role extends AbstractEntity {
   })
   name: string;
 
-  @ManyToOne(() => User, (user) => user.roles, {
+  @ManyToMany(() => User, (user) => user.roles, {
     cascade: ['insert', 'update'],
   })
+  @JoinTable()
   users: User[];
 }

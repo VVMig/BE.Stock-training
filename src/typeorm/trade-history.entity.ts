@@ -1,12 +1,6 @@
-import { Exclude } from 'class-transformer';
+import { Transform } from 'class-transformer';
 import { CRYPTOCURRENCY_SHORT } from 'src/constants/Currency';
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { User } from './user.entity';
 
@@ -15,13 +9,21 @@ export class TradeHistory extends AbstractEntity {
   @Column({
     nullable: true,
     default: 0,
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
   })
+  @Transform(({ value }) => +value)
   initialBet: number;
 
   @Column({
     nullable: true,
     default: 0,
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
   })
+  @Transform(({ value }) => +value)
   closeBet: number;
 
   @Column({

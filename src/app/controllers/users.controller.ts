@@ -3,7 +3,6 @@ import {
   Controller,
   Get,
   Param,
-  ParseIntPipe,
   Post,
   Query,
   UsePipes,
@@ -25,7 +24,18 @@ export class UsersController {
     return this.userService.getUsers();
   }
 
-  @Get('tradehistory/:uuid')
+  @Get(USERS_ENDPOINTS.USER)
+  async getUser(@Param('uuid') uuid: string) {
+    try {
+      const user = await this.userService.findUsersByUuid(uuid);
+
+      return user;
+    } catch (error) {
+      return {};
+    }
+  }
+
+  @Get(USERS_ENDPOINTS.USER_HISTORY)
   findUsersById(@Param('uuid') uuid: string, @Query() queryParams: IQueryPage) {
     const { page = 1, limit = 10 } = queryParams;
 

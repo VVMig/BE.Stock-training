@@ -6,6 +6,7 @@ import { PostgresErrorCode } from 'src/constraints/errors.constraint';
 import { RegisterDto } from 'src/dtos/Register.dto';
 import { ConfirmPasswordException } from 'src/exceptions/confirm-password.exception';
 import { UserAlreadyExistException } from 'src/exceptions/user-already-exist.exception';
+import { IAuthResponse } from 'src/interfaces';
 import { AuthenticationProvider } from 'src/providers/auth.provider';
 import { User } from 'src/typeorm';
 import { UsersService } from '../services';
@@ -35,7 +36,7 @@ export class AuthService {
     return null;
   }
 
-  async login(user: User) {
+  async login(user: User): Promise<IAuthResponse> {
     const tokens = await this.getTokens(user.uuid, user.name);
 
     return {
@@ -44,7 +45,7 @@ export class AuthService {
     };
   }
 
-  async registerUser(body: RegisterDto) {
+  async registerUser(body: RegisterDto): Promise<IAuthResponse> {
     const { name, email, password, confirmPassword } = body;
 
     if (password !== confirmPassword) {
@@ -64,8 +65,20 @@ export class AuthService {
         throw new UserAlreadyExistException();
       }
 
+      console.log(error);
+
       throw new InternalServerErrorException();
     }
+  }
+
+  async refreshTokens(user: User): Promise<IAuthResponse> {
+    console.log(user);
+    const tokens = await this.getTokens(user.uuid, user.name);
+
+    return {
+      ...tokens,
+      user,
+    };
   }
 
   async getTokens(userUuid: string, name: string) {
@@ -77,10 +90,10 @@ export class AuthService {
         },
         {
           secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
-          expiresIn: '15m',
+          expiresIn: '1d',
         },
       ),
-      this.jwtService.signAsync(
+      this.jwtService.sign(
         {
           sub: userUuid,
           name,
@@ -91,6 +104,13 @@ export class AuthService {
         },
       ),
     ]);
+
+    const payload = await this.jwtService.verify(accessToken, {
+      secret: process.env.JWT_ACCESS_SECRET,
+    });
+
+    console.log('123');
+    console.log(payload);
 
     return {
       accessToken,

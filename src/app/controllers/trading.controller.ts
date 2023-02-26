@@ -1,4 +1,12 @@
-import { Body, Controller, Get, Post, Query } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Request,
+  UseGuards,
+} from '@nestjs/common';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   CONTROLLER_ENDPOINTS,
@@ -6,6 +14,7 @@ import {
 } from 'src/constants/Endpoints';
 import { TIMEFRAMES } from 'src/constants/Timeframes';
 import { TradingResultDto } from 'src/dtos/TradingResult.dto';
+import { AccessTokenGuard } from 'src/guards/access-token.guard';
 import { IFutureQuery, IKlineQuery } from 'src/interfaces';
 import { TradingService } from '../services';
 
@@ -66,16 +75,15 @@ export class TradingController {
     return tradeData;
   }
 
-  @Post(TRADING_ENDPOINTS.RESULT)
-  async result(@Body() body: TradingResultDto) {
-    const user = await this.tradingService.setTradeResult(
-      body.userUuid,
+  @UseGuards(AccessTokenGuard)
+  @Post(TRADING_ENDPOINTS.CANCEL)
+  async cancel(@Body() body: TradingResultDto, @Request() req) {
+    return this.tradingService.setTradeResult(
+      req.user,
       +body.initialBet,
       +body.closeBet,
       body.currency,
       body.tradeState as 'long' | 'short',
     );
-
-    return user;
   }
 }

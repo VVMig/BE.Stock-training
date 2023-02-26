@@ -1,5 +1,5 @@
 import { Exclude, Transform } from 'class-transformer';
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { Role } from './role.entity';
 import { TradeHistory } from './trade-history.entity';
@@ -32,9 +32,11 @@ export class User extends AbstractEntity {
   })
   tradeHistory: TradeHistory[];
 
-  @OneToMany(() => Role, (role) => role.users, {
+  @ManyToMany(() => Role, (role) => role.users, {
     cascade: ['insert', 'update'],
+    eager: true,
   })
   @Transform(({ value }) => value.map(({ name }) => name))
+  @JoinTable()
   roles: Role[];
 }
