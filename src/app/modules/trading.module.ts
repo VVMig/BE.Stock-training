@@ -6,7 +6,7 @@ import { Role, TradeHistory, User } from 'src/typeorm';
 
 @Module({
   controllers: [TradingController],
-  providers: [TradingService, UsersService],
+  providers: [TradingService],
   imports: [TypeOrmModule.forFeature([User, TradeHistory, Role])],
 })
 export class TradingModule {}

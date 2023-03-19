@@ -1,6 +1,6 @@
 export const TIMEFRAMES = {
   '1_MIN': 1,
-  '5_MIN': 3,
+  '5_MIN': 5,
   '15_MIN': 15,
   '30_MIN': 30,
   '1_HOURS': 60,

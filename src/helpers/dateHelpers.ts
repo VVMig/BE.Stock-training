@@ -19,3 +19,16 @@ export const generateRandomRangeDates = () => {
 
   return randomDate;
 };
+
+export const hoursToMilliseconds = (hours: number | string) => {
+  if (typeof hours === 'number') {
+    return hours * 60 * 60 * 1000;
+  }
+
+  const index = hours.indexOf('h');
+
+  const hoursStr = hours.substring(0, index);
+
+  // Convert the hours string to a number and return it
+  return parseInt(hoursStr, 10) * 60 * 60 * 1000;
+};

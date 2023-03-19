@@ -1,5 +1,12 @@
 import { Exclude, Transform } from 'class-transformer';
-import { Column, Entity, JoinTable, ManyToMany, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  Index,
+  JoinTable,
+  ManyToMany,
+  OneToMany,
+} from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { Role } from './role.entity';
 import { TradeHistory } from './trade-history.entity';
@@ -20,9 +27,41 @@ export class User extends AbstractEntity {
   })
   email: string;
 
+  @Column({
+    name: 'verified',
+    default: false,
+  })
+  verified: boolean;
+
   @Exclude()
   @Column({
-    nullable: false,
+    name: 'verificationToken',
+    default: '',
+  })
+  verificationToken: string;
+
+  @Exclude()
+  @Column({
+    name: 'resetToken',
+    default: '',
+  })
+  resetToken: string;
+
+  @Column({
+    name: 'subscribed',
+    default: false,
+  })
+  subscribed: boolean;
+
+  @Column({
+    name: 'subscribedRules',
+    default: '',
+  })
+  subscribedRules: string;
+
+  @Exclude()
+  @Column({
+    nullable: true,
     default: '',
   })
   password: string;

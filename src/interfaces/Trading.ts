@@ -4,6 +4,8 @@ export interface IKlineQuery {
   date: number;
 }
 
+export type TradeState = 'LONG' | 'SHORT';
+
 export interface IKlineResponse {
   result: {
     list: number[];

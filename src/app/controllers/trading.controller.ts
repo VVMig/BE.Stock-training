@@ -7,7 +7,7 @@ import {
   Request,
   UseGuards,
 } from '@nestjs/common';
-import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
 import {
   CONTROLLER_ENDPOINTS,
   TRADING_ENDPOINTS,
@@ -15,7 +15,7 @@ import {
 import { TIMEFRAMES } from 'src/constants/Timeframes';
 import { TradingResultDto } from 'src/dtos/TradingResult.dto';
 import { AccessTokenGuard } from 'src/guards/access-token.guard';
-import { IFutureQuery, IKlineQuery } from 'src/interfaces';
+import { IFutureQuery, IKlineQuery, TradeState } from 'src/interfaces';
 import { TradingService } from '../services';
 
 @ApiTags('Trading')
@@ -49,6 +49,8 @@ export class TradingController {
     return tradeData;
   }
 
+  @UseGuards(AccessTokenGuard)
+  @ApiBearerAuth()
   @Get(TRADING_ENDPOINTS.FUTURE)
   @ApiQuery({
     name: 'symbol',
@@ -76,6 +78,7 @@ export class TradingController {
   }
 
   @UseGuards(AccessTokenGuard)
+  @ApiBearerAuth()
   @Post(TRADING_ENDPOINTS.CANCEL)
   async cancel(@Body() body: TradingResultDto, @Request() req) {
     return this.tradingService.setTradeResult(
@@ -83,7 +86,8 @@ export class TradingController {
       +body.initialBet,
       +body.closeBet,
       body.currency,
-      body.tradeState as 'long' | 'short',
+      body.tradeState as TradeState,
+      body.margin,
     );
   }
 }

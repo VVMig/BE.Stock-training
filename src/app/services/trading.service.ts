@@ -9,15 +9,13 @@ import {
   getStartDate,
   mappedRequestData,
 } from 'src/helpers';
-import { IKlineResponse, ITradingData } from 'src/interfaces';
+import { IKlineResponse, ITradingData, TradeState } from 'src/interfaces';
 import { TradeHistory, User } from 'src/typeorm';
-import { Connection, DataSource, Repository } from 'typeorm';
-import { UsersService } from './users.service';
+import { Connection, Repository } from 'typeorm';
 
 @Injectable()
 export class TradingService {
   constructor(
-    private usersService: UsersService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(TradeHistory)
     private readonly tradeHistoryRepository: Repository<TradeHistory>,
@@ -28,6 +26,7 @@ export class TradingService {
     symbol: string,
     interval: string | number,
     date: number,
+    limit = 200,
   ): Promise<ITradingData> {
     const randomEndDate = date ? new Date(date) : getRandomDate();
 
@@ -43,6 +42,7 @@ export class TradingService {
             interval,
             start: startDate,
             end: endDate,
+            limit,
           },
         },
       );
@@ -103,7 +103,8 @@ export class TradingService {
     initialBet: number,
     closeBet: number,
     currency: CRYPTOCURRENCY_SHORT,
-    tradeState: 'short' | 'long',
+    tradeState: TradeState,
+    margin: number,
   ) {
     const queryRunner = this._connection.createQueryRunner();
 
@@ -118,6 +119,7 @@ export class TradingService {
         closeBet,
         currency,
         tradeState,
+        margin,
         user: user,
       });
 

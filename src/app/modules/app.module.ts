@@ -8,6 +8,8 @@ import entities from 'src/typeorm';
 import { UsersModule } from './users.module';
 import { AuthModule } from './auth.module';
 import { AuthSubscriber } from 'src/subscribers/auth.subscriber';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -15,6 +17,18 @@ import { AuthSubscriber } from 'src/subscribers/auth.subscriber';
     AuthModule,
     TradingModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    ScheduleModule.forRoot(),
+    MailerModule.forRoot({
+      transport: {
+        host: 'smtp.gmail.com',
+        service: 'gmail',
+        secure: false,
+        auth: (configService: ConfigService) => ({
+          user: configService.get('MAIL_USER'),
+          pass: configService.get('MAIL_PASSWORD'),
+        }),
+      },
+    }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useFactory: (configService: ConfigService) => ({
