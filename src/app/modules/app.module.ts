@@ -10,6 +10,7 @@ import { AuthModule } from './auth.module';
 import { AuthSubscriber } from 'src/subscribers/auth.subscriber';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ScheduleModule } from '@nestjs/schedule';
+import fs from 'fs';
 
 @Module({
   imports: [
@@ -38,6 +39,9 @@ import { ScheduleModule } from '@nestjs/schedule';
         username: configService.get('DB_USERNAME'),
         password: configService.get('DB_PASSWORD'),
         database: configService.get('DB_NAME'),
+        ssl: {
+          ca: fs.readFileSync(process.env.SSL_CA_CERTIFICATES),
+        },
         entities: entities,
         synchronize: true,
         subscribers: [AuthSubscriber],
