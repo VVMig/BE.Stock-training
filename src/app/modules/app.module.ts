@@ -10,7 +10,7 @@ import { AuthModule } from './auth.module';
 import { AuthSubscriber } from 'src/subscribers/auth.subscriber';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ScheduleModule } from '@nestjs/schedule';
-import fs from 'fs';
+import * as fs from 'fs';
 
 @Module({
   imports: [
@@ -32,20 +32,25 @@ import fs from 'fs';
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('DB_HOST'),
-        port: +configService.get<number>('DB_PORT'),
-        username: configService.get('DB_USERNAME'),
-        password: configService.get('DB_PASSWORD'),
-        database: configService.get('DB_NAME'),
-        ssl: {
-          ca: fs.readFileSync(process.env.SSL_CA_CERTIFICATES),
-        },
-        entities: entities,
-        synchronize: true,
-        subscribers: [AuthSubscriber],
-      }),
+      useFactory: (configService: ConfigService) => {
+        return {
+          type: 'postgres',
+          host: configService.get('DB_HOST'),
+          port: +configService.get<number>('DB_PORT'),
+          username: configService.get('DB_USERNAME'),
+          password: configService.get('DB_PASSWORD'),
+          database: configService.get('DB_NAME'),
+          ssl:
+            process.env.ENV !== 'development'
+              ? {
+                  ca: fs.readFileSync(process.env.SSL_CA_CERTIFICATES),
+                }
+              : undefined,
+          entities: entities,
+          synchronize: true,
+          subscribers: [AuthSubscriber],
+        };
+      },
       inject: [ConfigService],
     }),
   ],
