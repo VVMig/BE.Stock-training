@@ -29,7 +29,7 @@ COPY --from=builder /usr/src/app/node_modules/ ./node_modules/
 COPY --from=builder /usr/src/app/dist/ ./dist/
 
 # Expose the web server's port.
-EXPOSE 3000
+EXPOSE 8080
 
 # Run the application.
 CMD ["node", "dist/main"]
