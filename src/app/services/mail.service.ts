@@ -15,7 +15,9 @@ export class MailService {
   ) {}
 
   async sendUserConfirmation(user: User, token: string) {
-    const url = `${this.configService.get('BACKEND_URL')}/auth/verify/${token}`;
+    const url = `${this.configService.get(
+      'BACKEND_URL',
+    )}/api/v1/auth/verify/${token}`;
 
     await this.mailerService.sendMail({
       to: user.email,

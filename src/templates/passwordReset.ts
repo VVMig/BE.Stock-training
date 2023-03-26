@@ -1,262 +1,484 @@
-export const passwordResetHTMLTemplate = (url: string) => `<!DOCTYPE html>
-  <html>
-    <head>
-      <title></title>
-      <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1" />
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <style type="text/css">
-        @media screen {
-          @font-face {
-            font-family: 'Lato';
-            font-style: normal;
-            font-weight: 400;
-            src: local('Lato Regular'), local('Lato-Regular'),
-              url(https://fonts.gstatic.com/s/lato/v11/qIIYRU-oROkIk8vfvxw6QvesZW2xOQ-xsNqO47m55DA.woff)
-                format('woff');
-          }
-  
-          @font-face {
-            font-family: 'Lato';
-            font-style: normal;
-            font-weight: 700;
-            src: local('Lato Bold'), local('Lato-Bold'),
-              url(https://fonts.gstatic.com/s/lato/v11/qdgUG4U09HnJwhYI-uK18wLUuEpTyoUstqEm5AMlJo4.woff)
-                format('woff');
-          }
-  
-          @font-face {
-            font-family: 'Lato';
-            font-style: italic;
-            font-weight: 400;
-            src: local('Lato Italic'), local('Lato-Italic'),
-              url(https://fonts.gstatic.com/s/lato/v11/RYyZNoeFgb0l7W3Vu1aSWOvvDin1pK8aKteLpeZ5c0A.woff)
-                format('woff');
-          }
-  
-          @font-face {
-            font-family: 'Lato';
-            font-style: italic;
-            font-weight: 700;
-            src: local('Lato Bold Italic'), local('Lato-BoldItalic'),
-              url(https://fonts.gstatic.com/s/lato/v11/HkF_qI1x_noxlxhrhMQYELO3LdcAZYWl9Si6vvxL-qU.woff)
-                format('woff');
-          }
-        }
-  
-        /* CLIENT-SPECIFIC STYLES */
-        body,
-        table,
-        td,
-        a {
-          -webkit-text-size-adjust: 100%;
-          -ms-text-size-adjust: 100%;
-        }
-  
-        img {
-          -ms-interpolation-mode: bicubic;
-        }
-  
-        /* RESET STYLES */
-        img {
-          border: 0;
-          height: auto;
-          line-height: 100%;
-          outline: none;
-          text-decoration: none;
-        }
-  
-        table {
-          border-collapse: collapse !important;
-        }
-  
-        body {
-          height: 100% !important;
-          margin: 0 !important;
-          padding: 0 !important;
-          width: 100% !important;
-        }
-  
-        /* iOS BLUE LINKS */
-        a[x-apple-data-detectors] {
-          color: inherit !important;
-          text-decoration: none !important;
-          font-size: inherit !important;
-          font-family: inherit !important;
-          font-weight: inherit !important;
-          line-height: inherit !important;
-        }
-  
-        /* MOBILE STYLES */
-        @media screen and (max-width: 600px) {
-          h1 {
-            font-size: 32px !important;
-            line-height: 32px !important;
-          }
-        }
-  
-        /* ANDROID CENTER FIX */
-        div[style*='margin: 16px 0;'] {
-          margin: 0 !important;
-        }
-      </style>
-    </head>
-  
-    <body
-      style="
-        background-color: #f4f4f4;
-        margin: 0 !important;
-        padding: 0 !important;
-      "
-    >
-      <!-- HIDDEN PREHEADER TEXT -->
-      <div
-        style="
-          display: none;
-          font-size: 1px;
-          color: #fefefe;
-          line-height: 1px;
-          font-family: 'Lato', Helvetica, Arial, sans-serif;
-          max-height: 0px;
-          max-width: 0px;
-          opacity: 0;
-          overflow: hidden;
-        "
-      >
-       Password reset
-      </div>
-      <table border="0" cellpadding="0" cellspacing="0" width="100%">
-        <!-- LOGO -->
-        <tr>
-          <td bgcolor="#FFA73B" align="center">
-            <table
-              border="0"
-              cellpadding="0"
-              cellspacing="0"
-              width="100%"
-              style="max-width: 600px"
-            >
-              <tr>
-                <td
-                  align="center"
-                  valign="top"
-                  style="padding: 40px 10px 40px 10px"
-                ></td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="#FFA73B" align="center" style="padding: 0px 10px 0px 10px">
-            <table
-              border="0"
-              cellpadding="0"
-              cellspacing="0"
-              width="100%"
-              style="max-width: 600px"
-            >
-              <tr>
-                <td
-                  bgcolor="#ffffff"
-                  align="center"
-                  valign="top"
-                  style="
-                    padding: 40px 20px 20px 20px;
-                    border-radius: 4px 4px 0px 0px;
-                    color: #111111;
-                    font-family: 'Lato', Helvetica, Arial, sans-serif;
-                    font-size: 48px;
-                    font-weight: 400;
-                    letter-spacing: 4px;
-                    line-height: 48px;
-                  "
-                >
-                  <h1 style="font-size: 48px; font-weight: 400; margin: 2">
-                    If you want to reset your passwor just click the button below!
-                  </h1>
-                  <img
-                    src=" https://img.icons8.com/clouds/100/000000/handshake.png"
-                    width="125"
-                    height="120"
-                    style="display: block; border: 0px"
-                  />
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-        <tr>
-          <td bgcolor="#f4f4f4" align="center" style="padding: 0px 10px 0px 10px">
-            <table
-              border="0"
-              cellpadding="0"
-              cellspacing="0"
-              width="100%"
-              style="max-width: 600px"
-            >
+export const passwordResetHTMLTemplate = (url: string) => `<!doctype html>
+<html ⚡4email data-css-strict>
+<head><meta charset="utf-8"><style amp4email-boilerplate>body{visibility:hidden}</style><script async src="https://cdn.ampproject.org/v0.js"></script>
 
-              <tr>
-                <td bgcolor="#ffffff" align="left">
-                  <table width="100%" border="0" cellspacing="0" cellpadding="0">
-                    <tr>
-                      <td
-                        bgcolor="#ffffff"
-                        align="center"
-                        style="padding: 20px 30px 60px 30px"
-                      >
-                        <table border="0" cellspacing="0" cellpadding="0">
-                          <tr>
-                            <td
-                              align="center"
-                              style="border-radius: 3px"
-                              bgcolor="#FFA73B"
-                            >
-                              <a
-                                href="${url}"
-                                target="_blank"
-                                style="
-                                  font-size: 20px;
-                                  font-family: Helvetica, Arial, sans-serif;
-                                  color: #ffffff;
-                                  text-decoration: none;
-                                  color: #ffffff;
-                                  text-decoration: none;
-                                  padding: 15px 25px;
-                                  border-radius: 2px;
-                                  border: 1px solid #ffa73b;
-                                  display: inline-block;
-                                "
-                                >Reset password</a
-                              >
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-              <tr>
-                <td
-                  bgcolor="#ffffff"
-                  align="left"
-                  style="
-                    padding: 0px 30px 40px 30px;
-                    border-radius: 0px 0px 4px 4px;
-                    color: #666666;
-                    font-family: 'Lato', Helvetica, Arial, sans-serif;
-                    font-size: 18px;
-                    font-weight: 400;
-                    line-height: 25px;
-                  "
-                >
-                  <p style="margin: 0">Cheers,<br />TrainTrade Team</p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-       
-      </table>
-    </body>
-  </html>`;
+<style amp-custom>
+.es-desk-hidden {
+display:none;
+float:left;
+overflow:hidden;
+width:0;
+max-height:0;
+line-height:0;
+}
+body {
+width:100%;
+font-family:Imprima, Arial, sans-serif;
+}
+table {
+border-collapse:collapse;
+border-spacing:0px;
+}
+table td, body, .es-wrapper {
+padding:0;
+Margin:0;
+}
+.es-content, .es-header, .es-footer {
+table-layout:fixed;
+width:100%;
+}
+p, hr {
+Margin:0;
+}
+h1, h2, h3, h4, h5 {
+Margin:0;
+line-height:120%;
+font-family:Imprima, Arial, sans-serif;
+}
+.es-left {
+float:left;
+}
+.es-right {
+float:right;
+}
+.es-p5 {
+padding:5px;
+}
+.es-p5t {
+padding-top:5px;
+}
+.es-p5b {
+padding-bottom:5px;
+}
+.es-p5l {
+padding-left:5px;
+}
+.es-p5r {
+padding-right:5px;
+}
+.es-p10 {
+padding:10px;
+}
+.es-p10t {
+padding-top:10px;
+}
+.es-p10b {
+padding-bottom:10px;
+}
+.es-p10l {
+padding-left:10px;
+}
+.es-p10r {
+padding-right:10px;
+}
+.es-p15 {
+padding:15px;
+}
+.es-p15t {
+padding-top:15px;
+}
+.es-p15b {
+padding-bottom:15px;
+}
+.es-p15l {
+padding-left:15px;
+}
+.es-p15r {
+padding-right:15px;
+}
+.es-p20 {
+padding:20px;
+}
+.es-p20t {
+padding-top:20px;
+}
+.es-p20b {
+padding-bottom:20px;
+}
+.es-p20l {
+padding-left:20px;
+}
+.es-p20r {
+padding-right:20px;
+}
+.es-p25 {
+padding:25px;
+}
+.es-p25t {
+padding-top:25px;
+}
+.es-p25b {
+padding-bottom:25px;
+}
+.es-p25l {
+padding-left:25px;
+}
+.es-p25r {
+padding-right:25px;
+}
+.es-p30 {
+padding:30px;
+}
+.es-p30t {
+padding-top:30px;
+}
+.es-p30b {
+padding-bottom:30px;
+}
+.es-p30l {
+padding-left:30px;
+}
+.es-p30r {
+padding-right:30px;
+}
+.es-p35 {
+padding:35px;
+}
+.es-p35t {
+padding-top:35px;
+}
+.es-p35b {
+padding-bottom:35px;
+}
+.es-p35l {
+padding-left:35px;
+}
+.es-p35r {
+padding-right:35px;
+}
+.es-p40 {
+padding:40px;
+}
+.es-p40t {
+padding-top:40px;
+}
+.es-p40b {
+padding-bottom:40px;
+}
+.es-p40l {
+padding-left:40px;
+}
+.es-p40r {
+padding-right:40px;
+}
+.es-menu td {
+border:0;
+}
+s {
+text-decoration:line-through;
+}
+p, ul li, ol li {
+font-family:Imprima, Arial, sans-serif;
+line-height:150%;
+}
+ul li, ol li {
+Margin-bottom:15px;
+margin-left:0;
+}
+a {
+text-decoration:underline;
+}
+.es-menu td a {
+text-decoration:none;
+display:block;
+font-family:Imprima, Arial, sans-serif;
+}
+.es-menu amp-img, .es-button amp-img {
+vertical-align:middle;
+}
+.es-wrapper {
+width:100%;
+height:100%;
+}
+.es-wrapper-color, .es-wrapper {
+background-color:#FFFFFF;
+}
+.es-header {
+background-color:transparent;
+}
+.es-header-body {
+background-color:#EFEFEF;
+}
+.es-header-body p, .es-header-body ul li, .es-header-body ol li {
+color:#2D3142;
+font-size:14px;
+}
+.es-header-body a {
+color:#2D3142;
+font-size:14px;
+}
+.es-content-body {
+background-color:#EFEFEF;
+}
+.es-content-body p, .es-content-body ul li, .es-content-body ol li {
+color:#2D3142;
+font-size:18px;
+}
+.es-content-body a {
+color:#2D3142;
+font-size:18px;
+}
+.es-footer {
+background-color:transparent;
+}
+.es-footer-body {
+background-color:#FFFFFF;
+}
+.es-footer-body p, .es-footer-body ul li, .es-footer-body ol li {
+color:#2D3142;
+font-size:14px;
+}
+.es-footer-body a {
+color:#2D3142;
+font-size:14px;
+}
+.es-infoblock, .es-infoblock p, .es-infoblock ul li, .es-infoblock ol li {
+line-height:120%;
+font-size:12px;
+color:#CCCCCC;
+}
+.es-infoblock a {
+font-size:12px;
+color:#CCCCCC;
+}
+h1 {
+font-size:48px;
+font-style:normal;
+font-weight:bold;
+color:#2D3142;
+}
+h2 {
+font-size:36px;
+font-style:normal;
+font-weight:bold;
+color:#2D3142;
+}
+h3 {
+font-size:28px;
+font-style:normal;
+font-weight:bold;
+color:#2D3142;
+}
+.es-header-body h1 a, .es-content-body h1 a, .es-footer-body h1 a {
+font-size:48px;
+}
+.es-header-body h2 a, .es-content-body h2 a, .es-footer-body h2 a {
+font-size:36px;
+}
+.es-header-body h3 a, .es-content-body h3 a, .es-footer-body h3 a {
+font-size:28px;
+}
+a.es-button, button.es-button {
+padding:15px 20px 15px 20px;
+display:inline-block;
+background:#4114F7;
+border-radius:30px;
+font-size:22px;
+font-family:Imprima, Arial, sans-serif;
+font-weight:bold;
+font-style:normal;
+line-height:120%;
+color:#FFFFFF;
+text-decoration:none;
+width:auto;
+text-align:center;
+}
+.es-button-border {
+border-style:solid solid solid solid;
+border-color:#2CB543 #2CB543 #2CB543 #2CB543;
+background:#4114F7;
+border-width:0px 0px 0px 0px;
+display:inline-block;
+border-radius:30px;
+width:auto;
+}
+body {
+font-family:arial, "helvetica neue", helvetica, sans-serif;
+}
+.es-p-default {
+padding-top:20px;
+padding-right:40px;
+padding-bottom:0px;
+padding-left:40px;
+}
+.es-p-all-default {
+padding:0px;
+}
+@media only screen and (max-width:600px) {p, ul li, ol li, a { line-height:150% } h1, h2, h3, h1 a, h2 a, h3 a { line-height:120% } h1 { font-size:30px; text-align:left } h2 { font-size:24px; text-align:left } h3 { font-size:20px; text-align:left } .es-header-body h1 a, .es-content-body h1 a, .es-footer-body h1 a { font-size:30px; text-align:left } .es-header-body h2 a, .es-content-body h2 a, .es-footer-body h2 a { font-size:24px; text-align:left } .es-header-body h3 a, .es-content-body h3 a, .es-footer-body h3 a { font-size:20px; text-align:left } .es-menu td a { font-size:14px } .es-header-body p, .es-header-body ul li, .es-header-body ol li, .es-header-body a { font-size:14px } .es-content-body p, .es-content-body ul li, .es-content-body ol li, .es-content-body a { font-size:14px } .es-footer-body p, .es-footer-body ul li, .es-footer-body ol li, .es-footer-body a { font-size:14px } .es-infoblock p, .es-infoblock ul li, .es-infoblock ol li, .es-infoblock a { font-size:12px } *[class="gmail-fix"] { display:none } .es-m-txt-c, .es-m-txt-c h1, .es-m-txt-c h2, .es-m-txt-c h3 { text-align:center } .es-m-txt-r, .es-m-txt-r h1, .es-m-txt-r h2, .es-m-txt-r h3 { text-align:right } .es-m-txt-l, .es-m-txt-l h1, .es-m-txt-l h2, .es-m-txt-l h3 { text-align:left } .es-m-txt-r amp-img { float:right } .es-m-txt-c amp-img { margin:0 auto } .es-m-txt-l amp-img { float:left } .es-button-border { display:block } a.es-button, button.es-button { font-size:18px; display:block; border-right-width:0px; border-left-width:0px; border-top-width:15px; border-bottom-width:15px } .es-adaptive table, .es-left, .es-right { width:100% } .es-content table, .es-header table, .es-footer table, .es-content, .es-footer, .es-header { width:100%; max-width:600px } .es-adapt-td { display:block; width:100% } .adapt-img { width:100%; height:auto } td.es-m-p0 { padding:0px } td.es-m-p0r { padding-right:0px } td.es-m-p0l { padding-left:0px } td.es-m-p0t { padding-top:0px } td.es-m-p0b { padding-bottom:0 } td.es-m-p20b { padding-bottom:20px } .es-mobile-hidden, .es-hidden { display:none } tr.es-desk-hidden, td.es-desk-hidden, table.es-desk-hidden { width:auto; overflow:visible; float:none; max-height:inherit; line-height:inherit } tr.es-desk-hidden { display:table-row } table.es-desk-hidden { display:table } td.es-desk-menu-hidden { display:table-cell } .es-menu td { width:1% } table.es-table-not-adapt, .esd-block-html table { width:auto } table.es-social { display:inline-block } table.es-social td { display:inline-block } .es-desk-hidden { display:table-row; width:auto; overflow:visible; max-height:inherit } }
+</style>
+</head>
+<body>
+<div class="es-wrapper-color">
+<!--[if gte mso 9]>
+<v:background xmlns:v="urn:schemas-microsoft-com:vml" fill="t">
+<v:fill type="tile" color="#ffffff"></v:fill>
+</v:background>
+<![endif]-->
+<table class="es-wrapper" width="100%" cellspacing="0" cellpadding="0">
+<tr>
+<td valign="top">
+<table cellpadding="0" cellspacing="0" class="es-footer" align="center">
+<tr>
+<td align="center">
+<table bgcolor="#bcb8b1" class="es-footer-body" align="center" cellpadding="0" cellspacing="0" width="600">
+<tr>
+<td class="es-p20t es-p20b es-p40r es-p40l" align="left">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="520" align="center" valign="top">
+<table cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tr>
+<td align="center" style="font-size: 0px"><a target="_blank" href="https://tranetrade.vercel.app/"><amp-img src="https://tranetrade.vercel.app/assets/images/logo-no-background.svg" alt="Logo" style="display: block" height="60" title="Logo"></amp-img></a></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" class="es-content" align="center">
+<tr>
+<td align="center">
+<table bgcolor="#efefef" class="es-content-body" align="center" cellpadding="0" cellspacing="0" width="600" style="border-radius: 20px 20px 0 0 ">
+<tr>
+<td class="es-p40t es-p40r es-p40l" align="left">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="520" align="center" valign="top">
+<table cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tr>
+<td align="left" class="es-m-txt-c" style="font-size: 0px"><a target="_blank" href="#"><amp-img src="https://glisox.stripocdn.email/content/guids/CABINET_ee77850a5a9f3068d9355050e69c76d26d58c3ea2927fa145f0d7a894e624758/images/group_4076323.png" alt="Reset password" style="display: block;border-radius: 100px" width="100" title="Reset password" height="100"></amp-img></a></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="es-p20t es-p40r es-p40l" align="left">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="520" align="center" valign="top">
+<table cellpadding="0" cellspacing="0" width="100%" bgcolor="#fafafa" style="background-color: #fafafa;border-radius: 10px;border-collapse: separate" role="presentation">
+<tr>
+<td align="left" class="es-p20"><p><br></p><p>You're receiving this message because you request password reset.<br><br>Reset your password by clicking the button below.</p></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" class="es-content" align="center">
+<tr>
+<td align="center">
+<table bgcolor="#efefef" class="es-content-body" align="center" cellpadding="0" cellspacing="0" width="600">
+<tr>
+<td class="es-p30t es-p40b es-p40r es-p40l" align="left">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="520" align="center" valign="top">
+<table cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tr>
+<td align="center">
+<!--[if mso]><a href="${url}" target="_blank" hidden>
+<v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" xmlns:w="urn:schemas-microsoft-com:office:word" esdevVmlButton href="${url}"
+style="height:56px; v-text-anchor:middle; width:520px" arcsize="50%" stroke="f" fillcolor="#7630f3">
+<w:anchorlock></w:anchorlock>
+<center style='color:#ffffff; font-family:Imprima, Arial, sans-serif; font-size:22px; font-weight:700; line-height:22px; mso-text-raise:1px'>Reset password</center>
+</v:roundrect></a>
+<![endif]-->
+<!--[if !mso]><!-- --><span class="msohide es-button-border" style="display: block;background: #7630f3"><a href="${url}" class="es-button msohide" target="_blank" style="padding-left: 5px;padding-right: 5px;display: block;background: #7630f3;border-color: #7630f3">Reset password</a></span>
+<!--<![endif]--></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+<tr>
+<td class="es-p40r es-p40l" align="left">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="520" align="center" valign="top">
+<table cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tr>
+<td align="left"><p>Thanks,<br><br>TraneTrade</p></td>
+</tr>
+<tr>
+<td align="center" class="es-p40t es-p20b" style="font-size:0">
+<table border="0" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+<tr>
+<td style="border-bottom: 1px solid #666666;background: unset;height: 1px;width: 100%;margin: 0px"></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" class="es-content" align="center">
+<tr>
+<td align="center">
+<table bgcolor="#efefef" class="es-content-body" align="center" cellpadding="0" cellspacing="0" width="600" style="border-radius: 0 0 20px 20px">
+<tr>
+<td class="es-p20t es-p20b es-p40r es-p40l esdev-adapt-off" align="left">
+<table width="520" cellpadding="0" cellspacing="0" class="esdev-mso-table">
+<tr>
+<td class="esdev-mso-td" valign="top">
+<table cellpadding="0" cellspacing="0" align="left" class="es-left">
+<tr>
+<td width="47" align="center" valign="top">
+<table cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tr>
+<td align="center" class="es-m-txt-l" style="font-size: 0px"><a target="_blank" href="#"><amp-img src="https://glisox.stripocdn.email/content/guids/CABINET_ee77850a5a9f3068d9355050e69c76d26d58c3ea2927fa145f0d7a894e624758/images/group_4076325.png" alt="Demo" style="display: block" width="47" title="Demo" height="47"></amp-img></a></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+<td width="20"></td>
+<td class="esdev-mso-td" valign="top">
+<table cellpadding="0" cellspacing="0" class="es-right" align="right">
+<tr>
+<td width="453" align="center" valign="top">
+<table cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tr>
+<td align="left"><p style="font-size: 16px">This link expire in 24 hours.</p></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table>
+<table cellpadding="0" cellspacing="0" class="es-footer" align="center">
+<tr>
+<td align="center">
+<table bgcolor="#bcb8b1" class="es-footer-body" align="center" cellpadding="0" cellspacing="0" width="600">
+<tr>
+<td class="es-p40t es-p30b es-p20r es-p20l" align="left">
+<table cellpadding="0" cellspacing="0" width="100%">
+<tr>
+<td width="560" align="left">
+<table cellpadding="0" cellspacing="0" width="100%" role="presentation">
+<tr>
+<td align="center" class="es-p20t"><p><a target="_blank"></a>Copyright © 2023&nbsp;TraneTrade<a target="_blank"></a></p></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table></td>
+</tr>
+</table>
+</div>
+</body>
+</html>`;

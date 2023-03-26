@@ -5,7 +5,6 @@ import {
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import bcrypt from 'bcrypt';
 import { PostgresErrorCode } from 'src/constraints/errors.constraint';
 import { RegisterDto } from 'src/dtos/Register.dto';
 import { ConfirmPasswordException } from 'src/exceptions/confirm-password.exception';
@@ -101,6 +100,7 @@ export class AuthService {
       },
       {
         secret: this.configService.get<string>('JWT_VERIFY_SECRET'),
+        expiresIn: '24h',
       },
     );
 

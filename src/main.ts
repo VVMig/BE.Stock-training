@@ -4,7 +4,7 @@ import { NestFactory, Reflector } from '@nestjs/core';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { AppModule } from './app/modules/app.module';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -15,8 +15,10 @@ async function bootstrap() {
     .addBearerAuth()
     .build();
 
+  app.setGlobalPrefix('api/v1');
+
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/v1', app, document);
+  SwaggerModule.setup('api/v1/docs', app, document);
 
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.useGlobalInterceptors(new ClassSerializerInterceptor(reflector));
