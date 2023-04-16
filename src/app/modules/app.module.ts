@@ -11,6 +11,7 @@ import { AuthSubscriber } from 'src/subscribers/auth.subscriber';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { ScheduleModule } from '@nestjs/schedule';
 import * as fs from 'fs';
+import { StrategyModule } from './strategy.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import * as fs from 'fs';
     TradingModule,
     ConfigModule.forRoot({ isGlobal: true }),
     ScheduleModule.forRoot(),
+    StrategyModule,
     MailerModule.forRoot({
       transport: {
         host: 'smtp.gmail.com',

@@ -6,4 +6,6 @@ export class TradingResultDto {
   currency: CRYPTOCURRENCY_SHORT;
   tradeState: string;
   margin: number;
+  strategyId: string;
+  stakeAmount: number;
 }

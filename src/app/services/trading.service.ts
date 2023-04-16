@@ -9,9 +9,15 @@ import {
   getStartDate,
   mappedRequestData,
 } from 'src/helpers';
-import { IKlineResponse, ITradingData, TradeState } from 'src/interfaces';
-import { TradeHistory, User } from 'src/typeorm';
+import {
+  IKlineResponse,
+  IPageResponse,
+  ITradingData,
+  TradeState,
+} from 'src/interfaces';
+import { Strategy, TradeHistory, User } from 'src/typeorm';
 import { Connection, Repository } from 'typeorm';
+import { StrategyService } from './strategy.service';
 
 @Injectable()
 export class TradingService {
@@ -19,6 +25,7 @@ export class TradingService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
     @InjectRepository(TradeHistory)
     private readonly tradeHistoryRepository: Repository<TradeHistory>,
+    private readonly strategyService: StrategyService,
     private readonly _connection: Connection,
   ) {}
 
@@ -99,13 +106,16 @@ export class TradingService {
   }
 
   async setTradeResult(
-    user: User,
+    strategyId: string,
     initialBet: number,
     closeBet: number,
+    stakeAmount: number,
     currency: CRYPTOCURRENCY_SHORT,
     tradeState: TradeState,
     margin: number,
   ) {
+    const strategy = await this.strategyService.findStrategyByUuid(strategyId);
+
     const queryRunner = this._connection.createQueryRunner();
 
     await queryRunner.connect();
@@ -120,8 +130,26 @@ export class TradingService {
         currency,
         tradeState,
         margin,
-        user: user,
+        strategy: strategy,
       });
+
+      const percent = +(
+        1 -
+        Math.min(initialBet, closeBet) / Math.max(initialBet, closeBet)
+      );
+
+      const isPositiveValue =
+        tradeState === 'LONG' ? closeBet >= initialBet : closeBet <= initialBet;
+
+      const currentValue = +(
+        isPositiveValue
+          ? stakeAmount * margin * percent
+          : -stakeAmount * margin * percent
+      ).toFixed(2);
+
+      strategy.funds = +strategy.funds + currentValue;
+
+      await this.strategyService.updateStrategy(strategyId, strategy);
 
       await this.tradeHistoryRepository.save(trade);
 
@@ -135,5 +163,70 @@ export class TradingService {
     }
 
     return trade;
+  }
+
+  async getBriefStats(strategyId: string) {
+    const [trades, totalTrades] =
+      await this.tradeHistoryRepository.findAndCountBy({
+        strategy: {
+          uuid: strategyId,
+        },
+      });
+
+    const [winTrades, loseTrades] = trades.reduce(
+      (acc, trade) => {
+        if (trade.tradeState === 'LONG') {
+          if (trade.initialBet < trade.closeBet) {
+            acc[0] = acc[0] + 1;
+          } else {
+            acc[1] = acc[1] + 1;
+          }
+        } else {
+          if (trade.initialBet < trade.closeBet) {
+            acc[1] = acc[1] + 1;
+          } else {
+            acc[0] = acc[0] + 1;
+          }
+        }
+
+        return acc;
+      },
+      [0, 0],
+    );
+
+    return {
+      winTrades,
+      loseTrades,
+      totalTrades,
+    };
+  }
+
+  async getTradeHistory(
+    strategyId: string,
+    page: number,
+    limit: number,
+  ): Promise<IPageResponse<TradeHistory>> {
+    const [trades, total] = await this.tradeHistoryRepository.findAndCount({
+      where: {
+        strategy: {
+          uuid: strategyId,
+        },
+      },
+      order: {
+        createdAt: 'DESC',
+      },
+    });
+
+    const totalPages = Math.ceil(total / limit);
+
+    return {
+      data: trades,
+      meta: {
+        page,
+        limit,
+        total,
+        totalPages,
+      },
+    };
   }
 }

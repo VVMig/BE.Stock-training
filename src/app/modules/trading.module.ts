@@ -3,10 +3,15 @@ import { TradingService, UsersService } from '../services';
 import { TradingController } from '../controllers';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Role, TradeHistory, User } from 'src/typeorm';
+import { StrategyModule } from './strategy.module';
 
 @Module({
   controllers: [TradingController],
   providers: [TradingService],
-  imports: [TypeOrmModule.forFeature([User, TradeHistory, Role])],
+  imports: [
+    TypeOrmModule.forFeature([User, TradeHistory, Role]),
+    StrategyModule,
+  ],
+  exports: [TradingService],
 })
 export class TradingModule {}

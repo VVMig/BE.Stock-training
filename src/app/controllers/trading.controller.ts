@@ -82,12 +82,37 @@ export class TradingController {
   @Post(TRADING_ENDPOINTS.CANCEL)
   async cancel(@Body() body: TradingResultDto, @Request() req) {
     return this.tradingService.setTradeResult(
-      req.user,
+      body.strategyId,
       +body.initialBet,
       +body.closeBet,
+      +body.stakeAmount,
       body.currency,
       body.tradeState as TradeState,
       body.margin,
     );
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @ApiBearerAuth()
+  @ApiQuery({
+    name: 'strategyId',
+    type: 'string',
+    required: true,
+  })
+  @Get(TRADING_ENDPOINTS.HISTORY)
+  async getHistory(@Query('strategyId') strategyId: string) {
+    return this.tradingService.getTradeHistory(strategyId, 1, 1);
+  }
+
+  @UseGuards(AccessTokenGuard)
+  @ApiBearerAuth()
+  @ApiQuery({
+    name: 'strategyId',
+    type: 'string',
+    required: true,
+  })
+  @Get(TRADING_ENDPOINTS.STATS)
+  async briefStats(@Query('strategyId') strategyId: string) {
+    return this.tradingService.getBriefStats(strategyId);
   }
 }

@@ -2,12 +2,15 @@ export enum CONTROLLER_ENDPOINTS {
   TRADING = 'trading',
   USERS = 'users',
   AUTH = 'auth',
+  STRATEGY = 'strategy',
 }
 
 export enum TRADING_ENDPOINTS {
   PAST = 'past',
   FUTURE = 'future',
   CANCEL = 'cancel',
+  HISTORY = 'history',
+  STATS = 'stats',
 }
 
 export enum USERS_ENDPOINTS {
@@ -18,6 +21,13 @@ export enum USERS_ENDPOINTS {
   SUBSCRIBE_PRICE = 'subscribe/price',
   UNSUBSCRIBE_PRICE = 'unsubscribe/price',
   SET_ADMIN = 'set_admin',
+}
+
+export enum STRATEGY_ENDPOINTS {
+  CREATE = 'create',
+  ALL = 'all',
+  GET = 'get/:uuid',
+  REMOVE = 'remove/:uuid',
 }
 
 export enum AUTH_ENPOINTS {

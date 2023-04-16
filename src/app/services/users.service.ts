@@ -49,9 +49,9 @@ export class UsersService {
     interval: SubscriptionInterval,
     type: 'time' | 'interval',
   ) {
-    // if (user.subscribed) {
-    //   throw new BadRequestException('Already subscribed');
-    // }
+    if (user.subscribed) {
+      throw new BadRequestException('Already subscribed');
+    }
 
     let job: CronJob;
     let subscribedRules: string;
@@ -214,11 +214,12 @@ export class UsersService {
     page: number,
     limit: number,
   ): Promise<IPageResponse<TradeHistory>> {
-    const [trades, total] = await this.tradeHistoryRepository.findAndCountBy({
-      user: {
-        uuid: uuid,
-      },
-    });
+    const [trades, total] = [[], 0];
+    // await this.tradeHistoryRepository.findAndCountBy({
+    //   user: {
+    //     uuid: uuid,
+    //   },
+    // });
 
     const totalPages = Math.ceil(total / limit);
 
@@ -234,12 +235,12 @@ export class UsersService {
   }
 
   async getBriefStats(uuid: string) {
-    const [trades, totalTrades] =
-      await this.tradeHistoryRepository.findAndCountBy({
-        user: {
-          uuid: uuid,
-        },
-      });
+    const [trades, totalTrades] = [[], 0];
+    // await this.tradeHistoryRepository.findAndCountBy({
+    //   user: {
+    //     uuid: uuid,
+    //   },
+    // });
 
     const [winTrades, loseTrades] = trades.reduce(
       (acc, trade) => {

@@ -10,6 +10,7 @@ import {
 import { AbstractEntity } from './abstract.entity';
 import { Role } from './role.entity';
 import { TradeHistory } from './trade-history.entity';
+import { Strategy } from './strategy.entity';
 
 @Entity()
 export class User extends AbstractEntity {
@@ -66,10 +67,10 @@ export class User extends AbstractEntity {
   })
   password: string;
 
-  @OneToMany(() => TradeHistory, (tradeHistory) => tradeHistory.user, {
+  @OneToMany(() => Strategy, (strategy) => strategy.user, {
     cascade: ['insert', 'update'],
   })
-  tradeHistory: TradeHistory[];
+  strategies: Strategy[];
 
   @ManyToMany(() => Role, (role) => role.users, {
     cascade: ['insert', 'update'],

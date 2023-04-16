@@ -4,6 +4,7 @@ import { TradeState } from 'src/interfaces';
 import { Column, Entity, ManyToOne } from 'typeorm';
 import { AbstractEntity } from './abstract.entity';
 import { User } from './user.entity';
+import { Strategy } from './strategy.entity';
 
 @Entity()
 export class TradeHistory extends AbstractEntity {
@@ -46,6 +47,6 @@ export class TradeHistory extends AbstractEntity {
   })
   tradeState: TradeState;
 
-  @ManyToOne(() => User, (user) => user.tradeHistory)
-  user: User;
+  @ManyToOne(() => Strategy, (strategy) => strategy.trades)
+  strategy: Strategy;
 }
