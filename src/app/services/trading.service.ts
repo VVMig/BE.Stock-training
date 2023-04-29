@@ -1,9 +1,10 @@
 import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import axios from 'axios';
-import { CRYPTOCURRENCY_SHORT } from 'src/constants/Currency';
+import { CRYPTOCURRENCY_SHORT, currencyColorMap } from 'src/constants/Currency';
 import { UserNotFoundException } from 'src/exceptions/user-not-found.exception';
 import {
+  calculateProfit,
   getEndDate,
   getRandomDate,
   getStartDate,
@@ -18,6 +19,7 @@ import {
 import { Strategy, TradeHistory, User } from 'src/typeorm';
 import { Connection, Repository } from 'typeorm';
 import { StrategyService } from './strategy.service';
+import { CsvService } from './csv.sevice';
 
 @Injectable()
 export class TradingService {
@@ -27,6 +29,7 @@ export class TradingService {
     private readonly tradeHistoryRepository: Repository<TradeHistory>,
     private readonly strategyService: StrategyService,
     private readonly _connection: Connection,
+    private readonly csvService: CsvService,
   ) {}
 
   async getTradingData(
@@ -124,15 +127,6 @@ export class TradingService {
     let trade: TradeHistory;
 
     try {
-      trade = this.tradeHistoryRepository.create({
-        initialBet,
-        closeBet,
-        currency,
-        tradeState,
-        margin,
-        strategy: strategy,
-      });
-
       const percent = +(
         1 -
         Math.min(initialBet, closeBet) / Math.max(initialBet, closeBet)
@@ -150,6 +144,16 @@ export class TradingService {
       strategy.funds = +strategy.funds + currentValue;
 
       await this.strategyService.updateStrategy(strategyId, strategy);
+
+      trade = this.tradeHistoryRepository.create({
+        initialBet,
+        closeBet,
+        currency,
+        tradeState,
+        margin,
+        funds: strategy.funds,
+        strategy: strategy,
+      });
 
       await this.tradeHistoryRepository.save(trade);
 
@@ -205,6 +209,7 @@ export class TradingService {
     strategyId: string,
     page: number,
     limit: number,
+    order: 'ASC' | 'DESC' = 'DESC',
   ): Promise<IPageResponse<TradeHistory>> {
     const [trades, total] = await this.tradeHistoryRepository.findAndCount({
       where: {
@@ -213,7 +218,7 @@ export class TradingService {
         },
       },
       order: {
-        createdAt: 'DESC',
+        createdAt: order,
       },
     });
 
@@ -228,5 +233,108 @@ export class TradingService {
         totalPages,
       },
     };
+  }
+
+  async getChartsInfo(strategyId: string) {
+    const [trades, total] = await this.tradeHistoryRepository.findAndCount({
+      where: {
+        strategy: {
+          uuid: strategyId,
+        },
+      },
+    });
+
+    const currenciesTradesPercent = trades.reduce((acc, trade) => {
+      acc[trade.currency] = (acc[trade.currency] ?? 0) + 1;
+
+      return acc;
+    }, {});
+
+    const tradesPercent = Object.keys(currenciesTradesPercent).map((key) => {
+      return {
+        name: key,
+        value: +(currenciesTradesPercent[key] / total).toFixed(2) * 100,
+        color: currencyColorMap[key],
+      };
+    });
+
+    const currenciesWinsLose = Object.values(
+      trades.reduce((acc, trade) => {
+        const profit = calculateProfit(trade);
+
+        if (profit > 0) {
+          acc[trade.currency] = {
+            lose: 0,
+            ...acc[trade.currency],
+            win: (acc[trade.currency]?.win ?? 0) + 1,
+            name: trade.currency,
+          };
+        } else {
+          acc[trade.currency] = {
+            win: 0,
+            ...acc[trade.currency],
+            lose: (acc[trade.currency]?.lose ?? 0) + 1,
+            name: trade.currency,
+          };
+        }
+
+        return acc;
+      }, {}),
+    );
+
+    const totalProfit = trades.reduce((acc, trade) => {
+      return acc + calculateProfit(trade);
+    }, 0);
+
+    const profitPerCurrency = Object.entries(
+      trades.reduce((acc, trade) => {
+        acc[trade.currency] = +(
+          (acc[trade.currency] ?? 0) + calculateProfit(trade)
+        ).toFixed(2);
+
+        return acc;
+      }, {}),
+    ).map(([key, value]) => ({
+      name: key,
+      value: value,
+      color: currencyColorMap[key],
+    }));
+
+    return {
+      winsLose: currenciesWinsLose,
+      tradesPercent,
+      totalProfit: +totalProfit.toFixed(2),
+      profitPerCurrency,
+      fundsMove: trades.map((trade) => ({
+        value: trade.funds,
+      })),
+    };
+  }
+
+  async exportCSV(strategyId: string): Promise<string> {
+    const csvHeaders = [
+      { id: 'currency', title: 'Currency' },
+      { id: 'initialBet', title: 'Initial Price' },
+      { id: 'closeBet', title: 'Close Price' },
+      { id: 'margin', title: 'Margin' },
+      { id: 'tradeState', title: 'Trade State' },
+      { id: 'profit', title: 'Profit %' },
+      { id: 'funds', title: 'Funds' },
+    ];
+
+    const strategy = await this.strategyService.findStrategyByUuid(strategyId);
+
+    const { data } = await this.getTradeHistory(strategyId, 1, 1, 'ASC');
+
+    await this.csvService.createCsv(
+      csvHeaders,
+      data.map((trade) => ({
+        ...trade,
+        profit: calculateProfit(trade),
+      })),
+      strategy?.name,
+    );
+
+    return `${strategy?.name}.csv`;
   }
 }

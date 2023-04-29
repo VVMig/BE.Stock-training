@@ -5,6 +5,7 @@ import {
   Post,
   Query,
   Request,
+  Res,
   UseGuards,
 } from '@nestjs/common';
 import { ApiBearerAuth, ApiQuery, ApiTags } from '@nestjs/swagger';
@@ -17,6 +18,7 @@ import { TradingResultDto } from 'src/dtos/TradingResult.dto';
 import { AccessTokenGuard } from 'src/guards/access-token.guard';
 import { IFutureQuery, IKlineQuery, TradeState } from 'src/interfaces';
 import { TradingService } from '../services';
+import * as fs from 'fs';
 
 @ApiTags('Trading')
 @Controller(CONTROLLER_ENDPOINTS.TRADING)
@@ -114,5 +116,35 @@ export class TradingController {
   @Get(TRADING_ENDPOINTS.STATS)
   async briefStats(@Query('strategyId') strategyId: string) {
     return this.tradingService.getBriefStats(strategyId);
+  }
+
+  @ApiQuery({
+    name: 'strategyId',
+    type: 'string',
+    required: true,
+  })
+  @Get(TRADING_ENDPOINTS.EXPORT_CSV)
+  async exportCSV(@Query('strategyId') strategyId: string, @Res() res) {
+    const filename = await this.tradingService.exportCSV(strategyId);
+
+    res.download(filename, (err) => {
+      if (err) {
+        console.log(err);
+        res.status(500).end();
+      } else {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        fs.unlink(filename, () => {});
+      }
+    });
+  }
+
+  @ApiQuery({
+    name: 'strategyId',
+    type: 'string',
+    required: true,
+  })
+  @Get(TRADING_ENDPOINTS.CHARTS)
+  async getChartsInfo(@Query('strategyId') strategyId: string) {
+    return this.tradingService.getChartsInfo(strategyId);
   }
 }

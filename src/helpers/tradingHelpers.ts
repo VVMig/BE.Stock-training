@@ -1,6 +1,7 @@
 import * as moment from 'moment';
 import { TIMEFRAMES } from 'src/constants/Timeframes';
 import { IKlineResponse, IStockData } from 'src/interfaces';
+import { TradeHistory } from 'src/typeorm';
 
 export const getStartDate = (date: Date, timeframe: string | number) => {
   const checkedDate =
@@ -65,3 +66,14 @@ export const mappedRequestData = (data: IKlineResponse): IStockData[] =>
     close: +info[4],
     volume: +info[5],
   })) || [];
+
+export function calculateProfit(trade: TradeHistory) {
+  const isLong = trade.tradeState === 'LONG';
+  const profit = isLong
+    ? trade.closeBet - trade.initialBet
+    : trade.initialBet - trade.closeBet;
+  const profitPercent = (profit / trade.initialBet) * 100;
+  const totalProfitPercent = isLong ? profitPercent : profitPercent;
+
+  return +(totalProfitPercent * trade.margin).toFixed(2);
+}

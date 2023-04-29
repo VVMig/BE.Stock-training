@@ -11,6 +11,8 @@ export enum TRADING_ENDPOINTS {
   CANCEL = 'cancel',
   HISTORY = 'history',
   STATS = 'stats',
+  EXPORT_CSV = 'export_csv',
+  CHARTS = 'charts',
 }
 
 export enum USERS_ENDPOINTS {

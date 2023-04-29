@@ -47,6 +47,16 @@ export class TradeHistory extends AbstractEntity {
   })
   tradeState: TradeState;
 
+  @Column({
+    name: 'funds',
+    nullable: true,
+    default: 0,
+    type: 'decimal',
+    precision: 10,
+    scale: 2,
+  })
+  funds: number;
+
   @ManyToOne(() => Strategy, (strategy) => strategy.trades)
   strategy: Strategy;
 }
