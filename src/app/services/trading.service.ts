@@ -40,34 +40,51 @@ export class TradingService {
   ): Promise<ITradingData> {
     const randomEndDate = date ? new Date(date) : getRandomDate();
 
-    const endDate = randomEndDate.getTime();
-    const startDate = getStartDate(randomEndDate, interval);
+    const endDates = [];
+    const startDates = [];
+    const requests = [];
+
+    for (let i = 0; i < 10; i++) {
+      const endDate = i === 0 ? randomEndDate.getTime() : startDates[i - 1];
+      const startDate = getStartDate(new Date(endDate), interval);
+
+      endDates.push(endDate);
+      startDates.push(startDate);
+
+      requests.push(
+        axios
+          .get<IKlineResponse>(
+            'https://api.bybit.com/derivatives/v3/public/kline',
+            {
+              params: {
+                symbol,
+                interval,
+                start: startDate,
+                end: endDate,
+                limit,
+              },
+            },
+          )
+          .then((res) => res.data),
+      );
+    }
 
     try {
-      const { data } = await axios.get<IKlineResponse>(
-        'https://api.bybit.com/derivatives/v3/public/kline',
-        {
-          params: {
-            symbol,
-            interval,
-            start: startDate,
-            end: endDate,
-            limit,
-          },
-        },
+      const data = await Promise.all(requests);
+
+      const mappedData = mappedRequestData(
+        data.map((item) => item.result.list).flat(),
       );
 
-      const mappedData = mappedRequestData(data);
-
       return {
-        endDate,
-        startDate,
+        endDate: endDates[0],
+        startDate: startDates[startDates.length - 1],
         data: mappedData,
       };
     } catch (error) {
       return {
-        endDate,
-        startDate,
+        endDate: endDates[0],
+        startDate: startDates[startDates.length - 1],
         data: [],
       };
     }
@@ -97,7 +114,7 @@ export class TradingService {
       return {
         endDate,
         startDate: startDate.getTime(),
-        data: mappedRequestData(data),
+        data: mappedRequestData(data.result.list),
       };
     } catch (error) {
       return {

@@ -23,6 +23,9 @@ export enum USERS_ENDPOINTS {
   SUBSCRIBE_PRICE = 'subscribe/price',
   UNSUBSCRIBE_PRICE = 'unsubscribe/price',
   SET_ADMIN = 'set_admin',
+  GET_DATES = 'get_dates',
+  ADD_DATE = 'add_date',
+  REMOVE_DATE = 'remove_date',
 }
 
 export enum STRATEGY_ENDPOINTS {

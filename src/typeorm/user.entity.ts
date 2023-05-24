@@ -79,4 +79,17 @@ export class User extends AbstractEntity {
   @Transform(({ value }) => value.map(({ name }) => name))
   @JoinTable()
   roles: Role[];
+
+  @Exclude()
+  @Column({
+    type: 'jsonb',
+    nullable: true,
+    default: [],
+  })
+  dates: {
+    startDate: number;
+    endDate: number;
+    description?: string | null;
+    id: string;
+  }[];
 }

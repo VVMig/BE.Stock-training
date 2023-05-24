@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -11,7 +12,6 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { USERS_ENDPOINTS } from 'src/constants/Endpoints';
 import { Roles as RolesEnum } from 'src/constants/Roles';
@@ -23,11 +23,19 @@ import { AccessTokenGuard } from 'src/guards/access-token.guard';
 import { RolesGuard } from 'src/guards/roles.guard';
 import { IQueryPage } from 'src/interfaces';
 import { UsersService } from '../services';
+import { CreateDateDTO } from 'src/dtos/User.dto';
 
 @ApiTags('Users')
 @Controller('users')
 export class UsersController {
   constructor(private readonly userService: UsersService) {}
+
+  @Get(USERS_ENDPOINTS.GET_DATES)
+  @ApiBearerAuth()
+  @UseGuards(AccessTokenGuard)
+  getDate(@Request() req) {
+    return req.user.dates;
+  }
 
   @Get()
   @ApiBearerAuth()
@@ -91,5 +99,19 @@ export class UsersController {
   @UseGuards(AccessTokenGuard)
   unsubscribe(@Request() req) {
     return this.userService.unsubscribeFromPrice(req.user);
+  }
+
+  @Post(USERS_ENDPOINTS.ADD_DATE)
+  @ApiBearerAuth()
+  @UseGuards(AccessTokenGuard)
+  addDate(@Request() req, @Body() body: CreateDateDTO) {
+    return this.userService.addDate(body, req.user);
+  }
+
+  @Delete(USERS_ENDPOINTS.REMOVE_DATE)
+  @ApiBearerAuth()
+  @UseGuards(AccessTokenGuard)
+  removeDate(@Request() req, @Query('id') id: string) {
+    return this.userService.removeDate(id, req.user);
   }
 }

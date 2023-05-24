@@ -19,7 +19,7 @@ export interface IFutureQuery {
 }
 
 export interface IStockData {
-  date: number;
+  time: number;
   open: number;
   high: number;
   low: number;

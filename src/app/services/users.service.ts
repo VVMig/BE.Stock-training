@@ -15,6 +15,8 @@ import { Role, TradeHistory, User } from 'src/typeorm';
 import { Repository } from 'typeorm';
 import { MailService } from './mail.service';
 import { TradingService } from './trading.service';
+import { CreateDateDTO } from 'src/dtos/User.dto';
+import { randomUUID } from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -234,13 +236,39 @@ export class UsersService {
     };
   }
 
+  async addDate(dateDTO: CreateDateDTO, user: User) {
+    if (Array.isArray(user.dates)) {
+      user.dates = [
+        ...user.dates,
+        {
+          startDate: dateDTO.startDate,
+          endDate: dateDTO.endDate,
+          id: randomUUID(),
+          description: dateDTO.description,
+        },
+      ];
+    } else {
+      user.dates = [
+        {
+          startDate: dateDTO.startDate,
+          endDate: dateDTO.endDate,
+          id: randomUUID(),
+          description: dateDTO.description,
+        },
+      ];
+    }
+
+    return this.userRepository.save(user);
+  }
+
+  async removeDate(dateId: string, user: User) {
+    user.dates = user.dates.filter((date) => date.id !== dateId);
+
+    return this.userRepository.save(user);
+  }
+
   async getBriefStats(uuid: string) {
     const [trades, totalTrades] = [[], 0];
-    // await this.tradeHistoryRepository.findAndCountBy({
-    //   user: {
-    //     uuid: uuid,
-    //   },
-    // });
 
     const [winTrades, loseTrades] = trades.reduce(
       (acc, trade) => {

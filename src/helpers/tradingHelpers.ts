@@ -57,15 +57,17 @@ export const getEndDate = (date: Date, timeframe: string | number) => {
   return formattedDate[timeframe];
 };
 
-export const mappedRequestData = (data: IKlineResponse): IStockData[] =>
-  data.result?.list?.map((info) => ({
-    date: +info[0],
-    open: +info[1],
-    high: +info[2],
-    low: +info[3],
-    close: +info[4],
-    volume: +info[5],
-  })) || [];
+export const mappedRequestData = (data: number[]): IStockData[] =>
+  data
+    ?.map((info) => ({
+      time: +info[0] / 1000,
+      open: +info[1],
+      high: +info[2],
+      low: +info[3],
+      close: +info[4],
+      volume: +info[5],
+    }))
+    .sort((a, b) => a.time - b.time) || [];
 
 export function calculateProfit(trade: TradeHistory) {
   const isLong = trade.tradeState === 'LONG';
